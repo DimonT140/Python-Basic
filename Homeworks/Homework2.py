@@ -24,5 +24,5 @@ print(f'Словосочетание "{word_to_replace}" находится на
 new_word = input('На какое слово желаете заменить? ')
 
 # Вывод отформатированной строки
-formatted_text = text[:index] + new_word + text[index + len(word_to_replace):]
+formatted_text = text.replace(word_to_replace, new_word)
 print('Отредактированный текст: ', formatted_text)
