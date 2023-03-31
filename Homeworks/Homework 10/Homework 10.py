@@ -16,9 +16,9 @@ if __name__ == '__main__':
         elif action == "зберегти":
             # питаєм куди зберегти та зберігаєм нотатки
             save_file = input("Введіть шлях до файлу для збереження нотаток: ")
-            # якщо користувач не ввів шлях для збереження, то зберігаєм в notes.txt
+            # якщо користувач не ввів шлях для збереження, то зберігаєм в autosave.txt
             if not save_file:
-                save_file = "notes.txt"
+                save_file = "autosave.txt"
                 save_notes(notes, save_file)
             print(f"Збережено у файл {save_file}" '\n')
         elif action == "вийти":
