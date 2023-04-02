@@ -47,10 +47,11 @@ def latest_notes() -> None:
     global num_of_notes  # використовуємо глобальну змінну для перевірки кількості нотаток
     num_notes = int(input("Скільки найпізніших нотаток вивести? "))
     if num_notes > num_of_notes:
-        print(f"Не більше {num_of_notes}", '\n')  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
+        print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
         return
     sorted_notes = [note for i, note in sorted(enumerate(notes), reverse=True)]  # сортуємо за зворотнім порядком додавання
     print_notes(sorted_notes[:num_notes])  # виведення найпізніших нотаток
+    print()  # друк пустого рядка
 
 
 def longest_notes() -> None:
@@ -61,10 +62,11 @@ def longest_notes() -> None:
     global num_of_notes  # глобальна змінна
     num_notes = int(input("Скільки найдовших нотаток вивести? "))
     if num_notes > num_of_notes:
-        print(f"Не більше {num_of_notes}, '\n'")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
+        print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
         return
     sorted_notes = sorted(notes, key=len, reverse=True)  # сортування нотаток за довжиною в порядку спадання
     print_notes(sorted_notes[:num_notes])  # виведення найдовших нотаток
+    print()  # друк пустого рядка
 
 
 def shortest_notes() -> None:
@@ -75,7 +77,8 @@ def shortest_notes() -> None:
     global num_of_notes  # глобальна змінна
     num_notes = int(input("Скільки найкоротших нотаток вивести? "))  # запит на введення кількості найкоротших нотаток
     if num_notes > num_of_notes:
-        print(f"Не більше {num_of_notes}" '\n')  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
+        print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
         return
     sorted_notes = sorted(notes, key=len)  # сортування нотаток за довжиною в порядку зростання
     print_notes(sorted_notes[:num_notes])  # виведення найкоротших нотаток
+    print()  # друк пустого рядка
