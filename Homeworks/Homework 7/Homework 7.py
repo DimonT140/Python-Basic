@@ -1,28 +1,19 @@
-from notes import add_note, show_notes, sort_by_length, sort_by_time, reverse_sort
-notes = []
-
-COMMANDS = {
-    'add': add_note,
-    'earliest': lambda: show_notes(sort_by_time),
-    'latest': lambda: show_notes(reverse_sort(sort_by_time)),
-    'longest': lambda: show_notes(sort_by_length),
-    'shortest': lambda: show_notes(reverse_sort(sort_by_length))
-}
+from notes import add_note, earliest_notes, latest_notes, longest_notes, shortest_notes
 
 if __name__ == '__main__':
-    while True:
-        command = input("Введіть команду: ")
-        if command in COMMANDS:
-            COMMANDS[command]()
-        elif command == 'exit':
+    while True:  # нескінченний цикл буде продовжуватись, доки не буде введена команда "exit"
+        command = input("Введіть команду (add, earliest, latest, longest, shortest, exit): ")  # просимо користувача ввести команду
+        if command == 'add':  # якщо команда "add", викликаємо функцію add_note()
+            add_note()
+        elif command == 'earliest':  # якщо команда "earliest", викликаємо функцію earliest_notes()
+            earliest_notes()
+        elif command == 'latest':  # якщо команда "latest", викликаємо функцію latest_notes()
+            latest_notes()
+        elif command == 'longest':  # якщо команда "longest", викликаємо функцію longest_notes()
+            longest_notes()
+        elif command == 'shortest':  # якщо команда "shortest", викликаємо функцію shortest_notes()
+            shortest_notes()
+        elif command == "exit":  # якщо команда "exit", виходимо з циклу
             break
-        else:
-            print("Невідома команда")
-
-'''
-Введіть нотатку: this is note
-Введіть нотатку: this is notissimo
-Введіть нотатку: note
-Введіть нотатку: this is a huge long, insanely long note
-Введіть нотатку: well, anyways
-'''
+        else:  # якщо команда не відповідає жодній з визначених, виводимо повідомлення про помилку
+            print("Неправильна команда!" '\n')
