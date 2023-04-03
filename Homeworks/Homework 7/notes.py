@@ -1,35 +1,34 @@
-notes = []  # список для зберігання нотаток
-num_of_notes = 0  # лічильник кількості нотаток
+notes = []
 
 
-def add_note() -> None:
+def add_note() -> str:
     """
-    Додає нову нотатку до списку notes і збільшує лічильник num_of_notes на 1.
-    :return: None
+    Зчитує нотатку та повертає її
+    :return: нотатка
     """
-    global num_of_notes  # використовуємо глобальну змінну для збільшення лічильника
     note = input("Введіть вашу нотатку: ")  # запит на введення нотатки
     notes.append(note)  # додаємо нотатку до списку
+    num_of_notes = len(notes)  # отримуємо кількість нотаток у списку
     num_of_notes += 1  # збільшуємо лічильник на 1
     print()  # друк пустого рядка для красоти :)
+    return note
 
 
-def print_notes(notes_to_print: list) -> None:
+def print_notes(notes_to_print: list):
     """
     Виводить на екран всі нотатки зі списку notes_to_print.
     :param notes_to_print: список нотаток, які потрібно вивести на екран
-    :return: None
     """
     for note in notes_to_print:
         print(note)  # друк кожної нотатки
 
 
-def earliest_notes() -> None:
+def earliest_notes(notes: list):
     """
-    Виводить на екран перші num_notes найраніших нотаток зі списку notes.
-    :return: None
+    Виводить на екран перші num_notes найраніших нотаток зі списку notes_to_print.
+    :param notes: список нотаток, які потрібно підготувати для виводу на екран
     """
-    global num_of_notes  # використовуємо глобальну змінну для перевірки кількості нотаток
+    num_of_notes = len(notes)  # змінна для перевірки кількості нотаток
     num_notes = int(input("Скільки найраніших нотаток вивести? "))
     if num_notes > num_of_notes:
         print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
@@ -39,12 +38,12 @@ def earliest_notes() -> None:
     print()  # друк пустого рядка
 
 
-def latest_notes() -> None:
+def latest_notes(notes: list):
     """
     Виводить на екран перші num_notes найпізніших нотаток зі списку notes.
-    :return: None
+    :param notes: список нотаток, які потрібно підготувати для виводу на екран
     """
-    global num_of_notes  # використовуємо глобальну змінну для перевірки кількості нотаток
+    num_of_notes = len(notes)  # змінна для перевірки кількості нотаток
     num_notes = int(input("Скільки найпізніших нотаток вивести? "))
     if num_notes > num_of_notes:
         print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
@@ -54,12 +53,12 @@ def latest_notes() -> None:
     print()  # друк пустого рядка
 
 
-def longest_notes() -> None:
+def longest_notes(notes: list):
     """
     Функція, що виводить найдовші нотатки зі списку заміток.
-    :return: None
+    :param notes: список нотаток, які потрібно підготувати для виводу на екран
     """
-    global num_of_notes  # глобальна змінна
+    num_of_notes = len(notes)  # змінна для перевірки кількості нотаток
     num_notes = int(input("Скільки найдовших нотаток вивести? "))
     if num_notes > num_of_notes:
         print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
@@ -69,13 +68,13 @@ def longest_notes() -> None:
     print()  # друк пустого рядка
 
 
-def shortest_notes() -> None:
+def shortest_notes(notes: list):
     """
-    Функція, що виводить найменші нотатки зі списку заміток.
-    :return: None
+    Функція, що виводить найкоротші нотатки зі списку заміток.
+    :param notes: список нотаток, які потрібно підготувати для виводу на екран
     """
-    global num_of_notes  # глобальна змінна
-    num_notes = int(input("Скільки найкоротших нотаток вивести? "))  # запит на введення кількості найкоротших нотаток
+    num_of_notes = len(notes)  # змінна для перевірки кількості нотаток
+    num_notes = int(input("Скільки найкоротших нотаток вивести? "))
     if num_notes > num_of_notes:
         print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
         return
