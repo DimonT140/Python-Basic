@@ -1,17 +1,12 @@
-notes = []
-
-
-def add_note() -> str:
+def add_note(list_of_notes: list) -> list:
     """
     Зчитує нотатку та повертає її
     :return: нотатка
     """
     note = input("Введіть вашу нотатку: ")  # запит на введення нотатки
-    notes.append(note)  # додаємо нотатку до списку
-    num_of_notes = len(notes)  # отримуємо кількість нотаток у списку
-    num_of_notes += 1  # збільшуємо лічильник на 1
+    list_of_notes.append(note)  # додаємо нотатку до списку
     print()  # друк пустого рядка для красоти :)
-    return note
+    return list_of_notes
 
 
 def print_notes(notes_to_print: list):
@@ -33,8 +28,8 @@ def earliest_notes(note_list: list):
     if num_notes > num_of_notes:
         print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
         return
-    sorted_notes = [note for i, note in sorted(enumerate(note_list))]  # сортуємо за порядком додавання
-    print_notes(sorted_notes[:num_notes])  # виведення найраніших нотаток
+    # виведення найраніших нотаток, тобто безпосередньо самого списку
+    print_notes(note_list[:num_notes])
     print()  # друк пустого рядка
 
 
@@ -48,8 +43,8 @@ def latest_notes(note_list: list):
     if num_notes > num_of_notes:
         print(f"Не більше {num_of_notes} \n")  # повідомлення, що не можна вивести більше, ніж є наявних нотаток
         return
-    sorted_notes = [note for i, note in sorted(enumerate(note_list), reverse=True)]  # сортуємо за зворотнім порядком додавання
-    print_notes(sorted_notes[:num_notes])  # виведення найпізніших нотаток
+    # виведення найраніших нотаток, тобто безпосередньо самого оберненого списку
+    print_notes(note_list[::-1][:num_notes])
     print()  # друк пустого рядка
 
 
