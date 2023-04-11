@@ -46,12 +46,10 @@ def show_brand_distribution(data):
 def main():
     file_path = 'tech_inventory.csv'
     data = []
-
     with open(file_path, 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
             data.append(row)
-
     count_items(data, 'brand')
     count_items(data, 'category')
     get_items(data, 'brand')
