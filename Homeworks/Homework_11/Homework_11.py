@@ -1,61 +1,98 @@
-import csv
+import csv  # імпортуємо модуль csv
 
 
-def count_items(data, key):
+def count_items(data: list[dict], key: str) -> None:
+    """
+    Функція підрахунку кількості елементів з вказаним ключем у списку словників.
+    :param data: список словників, які містять дані про товари.
+    :param key: ключ, за яким відбуватиметься підрахунок.
+    """
+    # Створення порожнього словника для зберігання кількості елементів з вказаним ключем
     count_index = {}
+    # Прохід по кожному словнику у списку data
     for row in data:
+        # Отримання значення елемента з ключем key в поточному словнику
         item = row[key]
+        # Перевірка, чи було додано такий елемент до словника count_index раніше
         if item not in count_index:
+            # Якщо елемент не було додано, то додати його до словника та встановити значення 1
             count_index[item] = 1
         else:
+            # Якщо елемент було додано раніше, то збільшити кількість елементів на 1
             count_index[item] += 1
+    # Прохід по кожному елементу словника count_index
     for i, (item, count) in enumerate(count_index.items(), start=1):
+        # Виведення повідомлення про кількість елементів з вказаним ключем та певною категорією
         if key == 'brand':
             print(f'Від бренду "{item}" є {count} товарів')
         else:
             print(f'Серед категорії "{item}" є {count} товарів')
+        # Виведення повідомлення про продовження виведення інформації після кожних 8 елементів
         if i % 8 == 0:
             input("\nНатисніть enter, щоб побачити продовження")
             print()
 
 
-def get_items(data, key):
+def get_items(data: list[dict[str, str]], key: str) -> None:
+    """
+    Функція для виведення елементів списку, що містять заданий ключ та його значення.
+    :param data: список словників, що містять дані.
+    :param key: ключ, за яким проводиться пошук.
+    """
+    # Запит користувача про значення ключа
     value = input(f"\nПо якому/якій {key} вивести повну інформацію? \nабо натисніть enter, щоб пропустити \n")
     count = 0
+    # Проходження по списку
     for item in data:
+        # Перевірка, чи містить поточний елемент задане значення ключа
         if item[key] == value:
+            # Виведення елемента
             print(item)
             count += 1
+            # Кожні 8 елементів запит на продовження
             if count % 8 == 0:
                 input("\nНатисніть enter, щоб побачити продовження\n")
 
 
-def show_brand_distribution(data):
+def show_brand_distribution(data: list[dict[str, str]]) -> None:
+    """
+    Функція виводить на екран кількість товарів кожного бренду в кожній категорії.
+    :param data: список словникових елементів, що описують різні товари.
+    :type data: список, в якому кожен елемент містить словник з ключами та значеннями типу 'str'.
+    """
+    # Створення множини унікальних категорій, використовуючи генератор списку та set()
     categories = set(item['category'] for item in data)
+    # Для кожної категорії виводимо на екран кількість товарів кожного бренду, що належать до цієї категорії
     for category in categories:
-        brands = {}
+        brands = {}   # Створення порожнього словника для кількості товарів кожного бренду в категорії
+        # Обходимо кожен товар в списку data
         for item in data:
+            # Якщо товар належить до поточної категорії, то додається його бренд до словника brands та збільшується лічильник
             if item['category'] == category:
                 if item['brand'] in brands:
                     brands[item['brand']] += 1
                 else:
                     brands[item['brand']] = 1
+        # Виведення на екран кількість товарів кожного бренду в поточній категорії
         print(f"У категорії \"{category}\" представлені товари таких брендів: {brands}")
 
 
-def main():
-    file_path = 'tech_inventory.csv'
-    data = []
-    with open(file_path, 'r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            data.append(row)
-    count_items(data, 'brand')
-    count_items(data, 'category')
-    get_items(data, 'brand')
-    get_items(data, 'category')
-    show_brand_distribution(data)
+def main() -> None:
+    """
+    Головна функція програми, яка читає дані з csv-файлу та виконує деякі операції над даними.
+    """
+    file_path = 'tech_inventory.csv'  # Шлях до файлу
+    data = []  # Список для зберігання даних
+    with open(file_path, 'r') as file:  # Відкриття файлу на читання
+        reader = csv.DictReader(file)  # Створюємо читача csv-файлу
+        for row in reader:  # Прохід по рядках файлу
+            data.append(row)  # Додавання рядку до списку даних
+    count_items(data, 'brand')  # Виклик функції count_items для брендів
+    count_items(data, 'category')  # Виклик функції count_items для категорій
+    get_items(data, 'brand')  # Виклик функції get_items для брендів
+    get_items(data, 'category')  # Виклик функції get_items для категорій
+    show_brand_distribution(data)  # Виклик функції show_brand_distribution для розподілу брендів
 
 
 if __name__ == '__main__':
-    main()
+    main()  # Виклик головної функції
