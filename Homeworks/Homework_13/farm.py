@@ -1,6 +1,5 @@
 from animals import Dog, Hen, Cow, Cat
-from random import choices  # импортируем функцию choices из модуля random
-from random import randint  # импортируем функцию randint из модуля random
+from random import choices, randint  # импортируем функцию choices и randint из модуля random
 
 
 if __name__ == '__main__':
