@@ -1,7 +1,6 @@
-from .file_processor import DataEntry, FileProcessor  # імпортуємо класи DataEntry і FileProcessor з модуля file_processor
+from .data_entry import DataEntry  # імпортуємо клас DataEntry з модуля data_entry
+from .file_processor import FileProcessor  # імпортуємо клас FileProcessor з модуля file_processor
 import csv  # імпортуємо модуль для роботи з csv файлами
-import datetime  # імпортуємо модуль для роботи з датою та часом
-import os  # імпортуємо модуль для роботи з операційною системою
 from typing import List, Dict  # імпортуємо типи даних, які будуть використані в коді
 
 
@@ -30,30 +29,14 @@ class CSVFileProcessor(FileProcessor):
         return f"CSVFileProcessor(processor_filenames={self.processor_filenames}, sku_index={len(self.sku_index)}, " \
                f"warehouse_index={len(self.warehouse_index)}, operation_index={len(self.operation_index)})"
 
-    def load_file(filename: str) -> List[DataEntry]:
+    def load_file(self, filename: str):
         """
         Завантажує файли CSV з інформацією про товарні партії та перетворює цю інформацію на список об'єктів DataEntry.
         :param filename: назва файлу, що містить інформацію про товарні партії.
         :return: список об'єктів DataEntry, який містить інформацію про товарні партії, що містяться у файлі CSV.
         """
-        with open(os.path.join('sku', filename), 'r') as f:  # відкриваємо файл в режимі читання
-            reader = csv.reader(f)  # створюємо об'єкт csv.reader для читання даних з файлу
-            next(reader)  # переходимо до наступного рядка у файлі
-            data_entries = []  # створюємо порожній список, в який будуть зберігатися DataEntry об'єкти
+        with open(filename, 'r') as f:  # відкриваємо файл в режимі читання
+            reader = csv.DictReader(f)  # створюємо об'єкт csv.reader для читання даних з файлу
             for row in reader:  # цикл для ітерації по рядках у файлі
-                date = datetime.datetime.strptime(row[0], '%d-%b-%Y').date()  # зчитуємо дату операції
-                time = datetime.datetime.strptime(row[1], '%H:%M:%S').time()  # зчитуємо час операції
-                sku = row[2]  # зчитуємо SKU товару
-                warehouse = row[3]  # зчитуємо склад, на якому проведена операція
-                warehouse_cell_id = int(row[4])  # перетворюємо рядок з номером полиці у ціле число
-                operation = row[5]  # зчитуємо тип операції
-                invoice = int(row[6])  # перетворюємо рядок з номером інвойсу у ціле число
-                # зчитуємо дату закінчення терміну придатності товару
-                expiration_date = datetime.datetime.strptime(row[7], '%d-%b-%Y').date()
-                operation_cost = float(row[8])  # перетворення рядка з вартістю операції у десятичне число
-                comment = row[9]  # зчитуємо коментар до операції
-                data_entry = DataEntry(date, time, sku, warehouse, warehouse_cell_id, operation, invoice,
-                                       expiration_date,
-                                       operation_cost, comment)  # створюємо об'єкт класу DataEntry зі зчитаними даними
-                data_entries.append(data_entry)  # додаємо об'єкт класу DataEntry до списку даних
-        return data_entries  # повертаємо список даних, зчитаних з файлу
+                data_entry = DataEntry(**row)  # створюємо об'єкт класу DataEntry зі зчитаними даними
+                self.data.append(data_entry)  # додаємо об'єкт класу DataEntry до списку даних

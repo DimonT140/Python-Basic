@@ -4,23 +4,25 @@ import tkinter as tk  # імпортуємо модуль для створен�
 from PIL import Image, ImageTk  # імпортуємо модуль для роботи з зображеннями
 
 if __name__ == '__main__':
+    json_file_names = [os.path.join('SKU', filename) for filename in os.listdir('SKU') if filename.endswith('.json')]
+    csv_file_names = [os.path.join('SKU', filename) for filename in os.listdir('SKU') if filename.endswith('.csv')]
     # Створюємо об'єкти класів CSV та JSON для обробки даних.
     processor = [
-        JSONFileProcessor(processor_filenames=[], data=[], sku_index={}, warehouse_index={}, operation_index={}),
-        CSVFileProcessor(processor_filenames=[], data=[], sku_index={}, warehouse_index={}, operation_index={})
+        JSONFileProcessor(processor_filenames=json_file_names, data=[], sku_index={}, warehouse_index={}, operation_index={}),
+        CSVFileProcessor(processor_filenames=csv_file_names, data=[], sku_index={}, warehouse_index={}, operation_index={})
     ]  # Список процесорів.
     for p in processor:  # Перебираємо усі процесори в списку.
         # Перевіряємо, чи існує список процесорів та його довжина більше 0.
-        if p.processor_filenames and len(p.processor_filenames) > 0:
+        for i, _ in enumerate(p.processor_filenames):
             # Перевіряємо чи існує файл з назвою, яка міститься в списку процесорів.
-            if os.path.isfile(p.processor_filenames[0]):
-                p.data = p.load_file(p.processor_filenames[0])  # Завантажуємо дані з файлу в процесор.
+            if os.path.isfile(p.processor_filenames[i]):
+                p.load_file(p.processor_filenames[i])  # Завантажуємо дані з файлу в процесор.
             else:  # Якщо файл не знайдено,
-                print(f"Файл {p.processor_filenames[0]} не знайдено.")  # виводимо повідомлення про помилку.
+                print(f"Файл {p.processor_filenames[i]} не знайдено.")  # виводимо повідомлення про помилку.
         else:  # Якщо список процесорів порожній,
             print("Список файлів порожній")  # виводимо повідомлення про помилку.
         # Створюємо індекси SKU, складу та операцій для процесору
-        p.sku_index, p.warehouse_index, p.operation_index = p.create_indices(p.data)
+        p.sku_index, p.warehouse_index, p.operation_index = p.create_indices()
         # Розраховуємо метрики
         sale_profit, sku_expired, warehouse_count, warehouse_sold, warehouse_disposed = p.calculate_metric_x()
         if p.processor_filenames:  # Якщо назва файлу визначена для поточного процесору,
@@ -58,6 +60,7 @@ if __name__ == '__main__':
         for warehouse, count in warehouse_disposed.items():
             print(
                 f"Склад {warehouse}: {count} утилізованих товарів")  # Кількість утилізованих товарів на кожному складі.
+        print('=' * 20)
     # Відкриття файлу з діаграмою.
     image_path = 'FileProcessor(UML_class).png'  # Отримуємо шлях до файлу
     root = tk.Tk()  # Створюємо вікно Tkinter

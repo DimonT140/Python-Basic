@@ -1,50 +1,5 @@
-import csv  # імпортуємо модуль для роботи з csv файлами
-import datetime  # імпортуємо модуль для роботи з датою та часом
-import json  # імпортуємо модуль для роботи з json форматом
 from typing import List, Dict, Tuple  # імпортуємо типи даних, які будуть використані в коді
-
-
-class DataEntry:
-    """
-    Представляє запис даних про одну операцію з продажу та зберігання товарів на складі.
-    """
-
-    def __init__(self, date: datetime.date, time: datetime.time, sku: str, warehouse: str, warehouse_cell_id: int,
-                 operation: str, invoice: int, expiration_date: datetime.date, operation_cost: float,
-                 comment: str) -> None:
-        """
-        Ініціалізує об'єкт DataEntry із заданими параметрами.
-        :param date: дата операції
-        :param time: час операції
-        :param sku: унікальний ІД товару над яким виконуються операції
-        :param warehouse: унікальний ІД складу де відбувається операції
-        :param warehouse_cell_id: номер полиці на складі, де знаходиться цей товар
-        :param operation: тип операції
-        :param invoice: номер інвойсу (пересилання)
-        :param expiration_date: дата закінчення терміну придатності товару
-        :param operation_cost: ціна операції (менше ноля якщо витрати, більше якщо прибуток)
-        :param comment: коментар до операції
-        """
-        # ініціалізуємо всі властивості класу DataEntry
-        self.date = date  # дата операції
-        self.time = time  # час операції
-        self.sku = sku  # унікальний ІД товару
-        self.warehouse = warehouse  # унікальний ІД складу
-        self.warehouse_cell_id = warehouse_cell_id  # номер полиці на складі
-        self.operation = operation  # тип операції
-        self.invoice = invoice  # номер інвойсу
-        self.expiration_date = expiration_date  # дата закінчення терміну придатності товару
-        self.operation_cost = operation_cost  # ціна операції
-        self.comment = comment  # коментар до операції
-
-    def __str__(self) -> str:
-        """
-        Метод класу DataEntry
-        :return: рядок зі значеннями всіх властивостей об'єкту
-        """
-        return f"Date: {self.date}\nTime: {self.time}\nSKU: {self.sku}\nWarehouse: {self.warehouse}\nWarehouse Cell ID: " \
-               f"{self.warehouse_cell_id}\nOperation: {self.operation}\nInvoice: {self.invoice}\nExpiration Date: " \
-               f"{self.expiration_date}\nOperation Cost: {self.operation_cost}\nComment: {self.comment}"
+from .data_entry import DataEntry  # імпортуємо клас DataEntry з модуля data_entry
 
 
 class FileProcessor:
@@ -77,8 +32,7 @@ class FileProcessor:
         return f"FileProcessor(processor_filenames={self.processor_filenames}, data={self.data}, sku_index={self.sku_index}, " \
                f"warehouse_index={self.warehouse_index}, operation_index={self.operation_index})"
 
-    @staticmethod  # декоратор, який дозволяє визначити статичний метод
-    def load_file(filename: str) -> List[DataEntry]:
+    def load_file(self, filename: str) -> List[DataEntry]:
         """
         Завантажує дані з файлу, перевіряє його розширення та на основі цього виконує операції з
         файлом. Якщо розширення файлу є `json`, то відбувається завантаження json-даних з файлу та їх обробка з
@@ -87,29 +41,9 @@ class FileProcessor:
         :param filename: назва файлу
         :return: список `data_entries`, що містить всі створені екземпляри класу `DataEntry`.
         """
-        file_extension = filename.split(".")[-1]  # визначаємо формат файлу з переданого шляху до файлу
-        data_entries = []  # створюємо порожній список, який буде заповнюватися об'єктами DataEntry.
-        if file_extension == "json":  # перевіряємо, чи файл є json-файлом.
-            with open(filename, "r") as f:  # відкриваємо файл з вказаним ім'ям в режимі читання.
-                json_data = json.load(f)  # зчитуємо дані з json-файлу та зберігаємо їх у змінну json_data.
-                for entry in json_data:  # проходимося по кожному елементу зі списку json_data.
-                    # створюємо об'єкт DataEntry зі значеннями з json-файлу та зберігаємо його у змінну data_entry.
-                    data_entry = DataEntry(**entry)
-                    data_entries.append(data_entry)  # додаємо об'єкт data_entry до списку data_entries.
-        elif file_extension == "csv":  # якщо формат файлу не є json, перевіряємо, чи файл є csv-файлом.
-            with open(filename, "r") as f:  # відкриваємо файл з вказаним ім'ям в режимі читання.
-                # створюємо об'єкт csv.DictReader для зчитування файлу у вигляді словника.
-                csv_reader = csv.DictReader(f)
-                for row in csv_reader:  # проходимося по кожному словнику в csv_reader.
-                    # створюємо об'єкт DataEntry зі значеннями з csv-файлу та зберігаємо його у змінну data_entry
-                    data_entry = DataEntry(**row)
-                    data_entries.append(data_entry)  # додаємо об'єкт data_entry до списку data_entries.
-        else:  # якщо формат файлу не підтримується,
-            raise ValueError("Файл не підтримується.")  # видаємо помилку.
-        return data_entries  # повертаємо список об'єктів DataEntry
+        raise NotImplementedError
 
-    @staticmethod  # декоратор, який дозволяє визначити статичний метод
-    def create_indices(data: List[DataEntry]) -> Tuple[Dict[str, List[DataEntry]], Dict[str, List[DataEntry]],
+    def create_indices(self) -> Tuple[Dict[str, List[DataEntry]], Dict[str, List[DataEntry]],
                                                        Dict[str, List[DataEntry]]]:
         """
         Створює індекси, які зберігають об'єкти DataEntry зі списку data за такими критеріями:
@@ -122,7 +56,7 @@ class FileProcessor:
         sku_index = {}  # словник для індексування за стовпчиком sku
         warehouse_index = {}  # словник для індексування за стовпчиком warehouse
         operation_index = {}  # словник для індексування за стовпчиком operation
-        for row in data:  # проходимо по кожному рядку даних
+        for row in self.data:  # проходимо по кожному рядку даних
             sku = row.sku  # отримуємо значення стовпчика sku
             warehouse = row.warehouse  # отримуємо значення стовпчика warehouse
             operation = row.operation  # отримуємо значення стовпчика operation
